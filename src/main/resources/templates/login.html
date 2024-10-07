@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script>
+        async function login(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    window.location.href = "/home";
+                } else {
+                    const error = await response.json();
+                    alert("Ошибка: " + error.message);
+                }
+            } catch (err) {
+                console.error("Ошибка при входе:", err);
+                alert("Ошибка сети. Попробуйте снова.");
+            }
+        }
+    </script>
+</head>
+<body>
+<h2>Вход в систему</h2>
+<form id="loginForm" onsubmit="login(event)">
+    <div>
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" required>
+    </div>
+    <div>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" required>
+    </div>
+    <div>
+        <button type="submit">Войти</button>
+    </div>
+</form>
+</body>
+</html>

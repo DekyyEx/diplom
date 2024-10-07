@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <script>
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    window.location.href = "/login";
+                } else {
+                    alert("Ошибка выхода. Попробуйте снова.");
+                }
+            } catch (err) {
+                console.error("Ошибка при выходе:", err);
+                alert("Ошибка сети. Попробуйте снова.");
+            }
+        }
+
+        async function fetchUserInfo() {
+            try {
+                const response = await fetch('/api/user-info', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+
+                if (response.ok) {
+                    const userInfo = await response.json();
+                    document.getElementById('welcomeMessage').innerText = `Добро пожаловать, ${userInfo.username}!`;
+                } else {
+                    // Если не удалось получить информацию о пользователе
+                    console.error('Не удалось загрузить информацию о пользователе');
+                    alert("Ошибка при загрузке данных пользователя.");
+                }
+            } catch (err) {
+                console.error("Ошибка при запросе данных пользователя:", err);
+            }
+        }
+
+        window.onload = fetchUserInfo;
+    </script>
+</head>
+<body>
+<h2 id="welcomeMessage">Загрузка...</h2>
+
+<p>Вы успешно авторизовались на сайте.</p>
+
+<button onclick="logout()">Выход</button>
+</body>
+</html>
