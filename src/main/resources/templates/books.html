@@ -1,67 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Каталог книг</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books - Bookstore</title>
-    <link rel="stylesheet" href="../../java/ru/yurfff/vladbook/fronted/styles.css">
+    <meta name="description" content="Каталог книг - найдите любимые книги и добавьте их в корзину.">
+    <meta name="keywords" content="книги, каталог книг, онлайн магазин книг">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<header>
-    <nav>
-        <ul>
-            <li><a href="../../java/ru/yurfff/vladbook/fronted/index.html">Home</a></li>
-            <li><a href="books.html">Books</a></li>
-            <li><a href="pickup-locations.html">Pickup Locations</a></li>
-            <li><a href="orders.html">Orders</a></li>
-        </ul>
-    </nav>
-</header>
 
-<main>
-    <h2>Available Books</h2>
-    <div class="book-list">
-        <div class="book-item">
-            <h3>Book Title 1</h3>
-            <p>Author: Author Name</p>
-            <p>Price: $20</p>
-            <button class="button add-to-cart" data-title="Book Title 1" data-price="20">Add to Cart</button>
-        </div>
-        <div class="book-item">
-            <h3>Book Title 2</h3>
-            <p>Author: Author Name</p>
-            <p>Price: $25</p>
-            <button class="button add-to-cart" data-title="Book Title 2" data-price="25">Add to Cart</button>
-        </div>
-        <div class="book-item">
-            <h3>Book Title 3</h3>
-            <p>Author: Author Name</p>
-            <p>Price: $15</p>
-            <button class="button add-to-cart" data-title="Book Title 3" data-price="15">Add to Cart</button>
-        </div>
-        <div class="book-item">
-            <h3>Book Title 4</h3>
-            <p>Author: Author Name</p>
-            <p>Price: $30</p>
-            <button class="button add-to-cart" data-title="Book Title 4" data-price="30">Add to Cart</button>
-        </div>
-        <div class="book-item">
-            <h3>Book Title 5</h3>
-            <p>Author: Author Name</p>
-            <p>Price: $22</p>
-            <button class="button add-to-cart" data-title="Book Title 5" data-price="22">Add to Cart</button>
-        </div>
-        <div class="book-item">
-            <h3>Book Title 6</h3>
-            <p>Author: Author Name</p>
-            <p>Price: $18</p>
-            <button class="button add-to-cart" data-title="Book Title 6" data-price="18">Add to Cart</button>
+<div th:replace="~{base}">
+    <h2>Каталог книг</h2>
+    <div class="row">
+        <!-- Динамическое наполнение списка книг -->
+        <div th:each="book : ${books}" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card">
+                <img th:src="@{${book.coverImage}}" class="card-img-top" alt="Книга: [[${book.title}]]">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${book.title}"></h5>
+                    <p class="card-text" th:text="${book.author}"></p>
+                    <p class="card-text">
+                        Цена: <span th:text="${book.price}"></span> руб.
+                    </p>
+                    <a href="#" class="btn btn-primary" th:onclick="|addToCart(${book.id})|">Добавить в корзину</a>
+                </div>
+            </div>
         </div>
     </div>
-</main>
+</div>
 
-<footer>
-    <p>&copy; 2024 Bookstore. All rights reserved.</p>
-</footer>
+<script>
+    // Функция добавления книги в корзину (пример)
+    function addToCart(bookId) {
+        // Логика для отправки книги в корзину (например, AJAX-запрос на сервер)
+        console.log('Книга с id ' + bookId + ' добавлена в корзину');
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

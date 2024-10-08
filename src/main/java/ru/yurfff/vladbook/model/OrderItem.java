@@ -3,6 +3,8 @@ package ru.yurfff.vladbook.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 @Data
@@ -17,9 +19,11 @@ public class OrderItem {
     private String bookTitle;
 
     @Column(nullable = false)
+    @Positive
     private BigDecimal price;
 
     @Column(nullable = false)
+    @PositiveOrZero
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +34,11 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    // Default constructor
+    public OrderItem() {
+    }
+
+    // Constructor with parameters
     public OrderItem(String bookTitle, BigDecimal price, Integer quantity, Book book, Order order) {
         this.bookTitle = bookTitle;
         this.price = price;
@@ -38,6 +47,8 @@ public class OrderItem {
         this.order = order;
     }
 
-    public OrderItem() {
+    // Utility method to calculate total price
+    public BigDecimal getTotalPrice() {
+        return price.multiply(new BigDecimal(quantity));
     }
 }

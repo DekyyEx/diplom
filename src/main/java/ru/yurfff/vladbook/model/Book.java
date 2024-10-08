@@ -36,13 +36,30 @@ public class Book {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Setter
+    @Column(nullable = false)
+    private Boolean available = true;
+
+    @Setter
+    @Getter
+    @Column
+    private int publishedYear;
+
+    // Конструктор по умолчанию
     public Book() {
     }
 
-    public Book(String title, String author, String isbn, BigDecimal price) {
+    // Конструктор с обязательными параметрами
+    public Book(String title, String author, String isbn, BigDecimal price, int publishedYear, Boolean available) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.price = price;
+        this.publishedYear = publishedYear;
+        this.available = available != null ? available : true;  // Значение по умолчанию для доступности
+    }
+
+    public boolean isAvailable() {
+        return available;
     }
 }

@@ -31,4 +31,10 @@ public class PickupLocation {
     @Pattern(regexp = "^\\d{5,6}$", message = "Invalid postal code format")
     @Column(nullable = false)
     private String postalCode;
+
+    // Можно добавить координаты (например, для отображения на карте)
+    // @Column
+    // private Double latitude;
+    // @Column
+    // private Double longitude;
 }

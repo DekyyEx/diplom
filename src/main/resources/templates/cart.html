@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Корзина</title>
+</head>
+<body>
+<div th:replace="~{base}">
+    <h2>Ваша корзина</h2>
+
+    <!-- Если корзина пуста -->
+    <div th:if="${cartItems.size() == 0}">
+        <p>Ваша корзина пуста.</p>
+    </div>
+
+    <!-- Если в корзине есть товары -->
+    <div th:if="${cartItems.size() > 0}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Книга</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Цена</th>
+                <th scope="col">Итого</th>
+                <th scope="col">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${cartItems}">
+                <td th:text="${item.book.title}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${#numbers.formatDecimal(item.book.price, 0, 2)}"></td>
+                <td th:text="${#numbers.formatDecimal(item.book.price * item.quantity, 0, 2)}"></td>
+                <td>
+                    <!-- Кнопка для удаления товара из корзины -->
+                    <a href="#" class="btn btn-danger" th:onclick="|removeFromCart(${item.id})|">Удалить</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Общая сумма корзины -->
+        <div class="row">
+            <div class="col">
+                <h4>Итого: <span th:text="${#numbers.formatDecimal(cartTotal, 0, 2)}"></span> руб.</h4>
+            </div>
+        </div>
+
+        <!-- Кнопка для оформления заказа -->
+        <a href="/checkout" class="btn btn-success">Оформить заказ</a>
+    </div>
+</div>
+
+<script>
+    // Функция для удаления товара из корзины
+    function removeFromCart(itemId) {
+        // Логика для удаления товара из корзины (например, отправка AJAX-запроса на сервер)
+        console.log('Удалить товар с id ' + itemId);
+
+        // Здесь вы можете добавить код для отправки запроса на сервер, чтобы удалить элемент из корзины.
+        // Например, с использованием fetch или XMLHttpRequest:
+
+        fetch('/cart/remove/' + itemId, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    location.reload(); // Перезагружаем страницу после успешного удаления
+                } else {
+                    alert('Ошибка при удалении товара из корзины');
+                }
+            });
+    }
+</script>
+
+</body>
+</html>

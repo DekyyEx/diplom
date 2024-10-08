@@ -1,6 +1,7 @@
 package ru.yurfff.vladbook.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yurfff.vladbook.model.User;
@@ -20,48 +21,40 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
-        if (userService.existsByEmailOrUsername(user.getEmail(), user.getUsername())) {
-            return ResponseEntity.badRequest().body("Email or Username already exists");
-        }
-        User savedUser = userService.save(user);
-        return ResponseEntity.ok("User registered successfully with id: " + savedUser.getId());
-    }
-
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.findByEmail("test@example.com");
+        List<User> users = userService.findAll();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.findByUsername("testuser");
+        Optional<User> user = userService.findById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Обновление пользователя по ID
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        if (userService.existsById(id)) {
-            return ResponseEntity.notFound().build();
+        if (user == null) {
+            return ResponseEntity.badRequest().build(); // Возвращаем 400, если пользователь в запросе null
         }
+
+        if (!userService.existsById(id)) {
+            return ResponseEntity.notFound().build(); // Возвращаем 404, если пользователя с таким id нет
+        }
+
         User updatedUser = userService.update(id, user);
         return ResponseEntity.ok(updatedUser);
     }
 
+    // Удаление пользователя по ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (userService.existsById(id)) {
-            return ResponseEntity.notFound().build();
+        if (!userService.existsById(id)) {
+            return ResponseEntity.notFound().build(); // Возвращаем 404, если пользователя с таким id нет
         }
         userService.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<List<User>> getUsersByEmail(@PathVariable String email) {
-        List<User> users = userService.findByEmail(email);
-        return ResponseEntity.ok(users);
+        return ResponseEntity.noContent().build(); // Возвращаем 204 (No Content) после удаления
     }
 }

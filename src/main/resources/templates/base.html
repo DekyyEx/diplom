@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мои заказы</title>
+    <meta name="description" content="Магазин книг - каталог, корзина, заказы.">
+    <meta name="keywords" content="книги, магазин книг, покупки, заказы">
+    <title>Магазин книг</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -24,7 +26,7 @@
                     <a class="nav-link" href="/cart">Корзина</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/orders">Мои заказы</a>
+                    <a class="nav-link" href="/orders">Мои заказы</a>
                 </li>
             </ul>
         </div>
@@ -32,39 +34,12 @@
 </nav>
 
 <!-- Основной контент -->
-<div th:replace="~{base}">
-    <div class="container mt-5">
-        <h2>Мои заказы</h2>
-        <div th:if="${orders.size() == 0}">
-            <p>У вас нет заказов.</p>
-        </div>
-        <div th:if="${orders.size() > 0}">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Номер заказа</th>
-                    <th scope="col">Статус</th>
-                    <th scope="col">Дата</th>
-                    <th scope="col">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="order : ${orders}">
-                    <td th:text="${order.id}"></td>
-                    <td th:text="${order.status}"></td>
-                    <td th:text="${order.date}"></td>
-                    <td>
-                        <a href="#" class="btn btn-info">Подробнее</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<div class="container mt-4">
+    <!-- Динамическое содержимое, которое будет заменено с помощью Thymeleaf -->
+    <div th:replace="${content}">Тут должен быть контент</div>
 </div>
 
-<!-- Подключение JS для Bootstrap -->
+<!-- Скрипты Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

@@ -30,14 +30,27 @@ public class Order {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderItem> items;
 
-
+    // Пустой конструктор для JPA
     public Order() {}
 
+    // Конструктор с параметрами
     public Order(String customerName, String address, OrderStatus status, String pickupLocation, List<OrderItem> items) {
         this.customerName = customerName;
         this.address = address;
         this.status = status;
         this.pickupLocation = pickupLocation;
         this.items = items;
+    }
+
+    // Можно добавить методы для бизнес-логики, например:
+    public void addItem(OrderItem item) {
+        this.items.add(item);
+        item.setOrder(this); // Не забываем обновить связь в OrderItem
+    }
+
+    // Можно добавить метод для изменения статуса, если потребуется
+    public void updateStatus(OrderStatus newStatus) {
+        // Логика проверки допустимых изменений статуса
+        this.status = newStatus;
     }
 }
